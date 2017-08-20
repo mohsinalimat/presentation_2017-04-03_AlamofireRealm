@@ -88,7 +88,8 @@ protocol Movie {
     
     var name: String { get }
     var releaseDate: Date { get }
-    var averageRating: Double { get }
+    var grossing: Int { get }
+    var rating: Double { get }
     var cast: [Actor] { get }
 }
 ```
@@ -130,8 +131,8 @@ typealias MoviesResult = (_ movies: [Movie], _ error: Error?) -> ()
 
 protocol MovieService: class {
     
-    func getBestRatedMovies(completion: @escaping MoviesResult)
-    func getTopGrossingMovies(completion: @escaping MoviesResult)
+    func getBestRatedMovies(year: Int, completion: @escaping MoviesResult)
+    func getTopGrossingMovies(year: Int, completion: @escaping MoviesResult)
 }
 
 ```
@@ -171,25 +172,176 @@ and run `DemoApplication.xcworkspace` without compile errors, you are good to go
 
 
 
-# Step 5 - Create an API-specific comain implementation
+# Step 5 - Create an API-specific domain model implementation
 
 We are now ready to use Alamofire to pull some data from the API. Have a look at
-the data that will be returned from the API, using these two links:
+the data collections that can be fetched from the API:
+
+* [Top 5 Rated Movies 2015](http://danielsaidi.com/CocoaHeads-2017-04-03-Alamofire-Realm/api/movies/2015/rating)
+* [Top 5 Rated Movies 2016](http://danielsaidi.com/CocoaHeads-2017-04-03-Alamofire-Realm/api/movies/2016/rating)
+* [Top 5 Grossing Movies 2016](http://danielsaidi.com/CocoaHeads-2017-04-03-Alamofire-Realm/api/movies/2015/grossing)
+* [Top 5 Grossing Movies 2016](http://danielsaidi.com/CocoaHeads-2017-04-03-Alamofire-Realm/api/movies/2016/grossing)
+
+As you can see, the "api" provides a very limit set of information, but it works
+great to demonstrate how to fetch and parse it with Alamofire.
+
+Let's create an API-specific implementation of the domain model! Create an `API`
+folder in the project root. Just as with `Domain`, create a `Model` folder with
+two files: `ApiMovie.swift` and `ApiActor.swift`.
+
+```
+// ApiMovie.swift
+
+import ObjectMapper
+
+class ApiMovie: NSObject, Movie {
+    
+    required public init?(map: Map) {
+        super.init()
+    }
+    
+    var name = ""
+    var releaseDate = Date(timeIntervalSince1970: 0)
+    var grossing = 0
+    var rating = 0.0
+    fileprivate var _cast = [ApiActor]()
+    var cast = [Actor]()
+}
+
+
+extension ApiMovie: Mappable {
+    
+    func mapping(map: Map) {
+        
+        name <- map["name"]
+        releaseDate <- (map["releaseDate"], DateTransform())
+        grossing <- map["grossing"]
+        rating <- map["grossing"]
+        _cast <- map["cast"]
+        cast = _cast
+    }
+}
+``` 
+
+```
+// ApiActor.swift
+
+import ObjectMapper
+
+class ApiActor: NSObject, Actor {
+    
+    required public init?(map: Map) {
+        super.init()
+    }
+    
+    var name = ""
+}
+
+
+extension ApiActor: Mappable {
+    
+    func mapping(map: Map) {
+        
+        name <- map["name"]
+    }
+}
+``` 
+
+As you can see, these classes implement their respecive model protocol, then add
+Alamofire mapping ontop. While `ApiActor` is straightforward, some things can be
+said about `ApiMovie`:
+
+* The release date is parsed using a DateTransform()
+* The `Movie` protocol has an [Actor] array, but the mapping requires [ApiActor].
+We therefore use a fileprivate `_cast` property to map cast data then copies the
+mapped data to the public `cast` property.
+
+If we have set things up properly, we should now be able to point Alamofire to a
+certain api url, and then recursively parse the data without any further effort.
 
 
 
+# Step 6 - Create an API-specific domain service implementation
+
+Before we implement an API-specific `MovieService` implementation, let's setup a
+base layer for working with Alamofire.
+
+Since real-world APIs can most often run in several different environments, like
+test, staging and prod, I prefer to have an enum in the `Api` folder, that lists
+all available environments. We only have a "production" environment for our fake
+API, but let's go ahead and add this enum nevertheless:
+
+## Managing environments and routes
+
+```
+// ApiEnvironment.swift
+
+import Foundation
+
+enum ApiEnvironment: String { case
+    
+    prod = "http://danielsaidi.com/CocoaHeads-2017-04-03-Alamofire-Realm/api/"
+}
+
+extension ApiEnvironment {
+    
+    var url: String {
+        return rawValue
+    }
+}
+
+```
+
+With this enum in place, we can then list all (static) available API routes in a
+separate enum as well:
+
+```
+// ApiRoute.swift
+
+enum ApiRoute { case
+    
+    auth,
+    topGrossingMovies(year: Int),
+    topRatedMovies(year: Int)
+}
 
 
+extension ApiRoute {
+    
+    var path: String {
+        switch self {
+        case .topGrossingMovies(let year): return "movies/\(year)/grossing"
+        case .topRatedMovies(let year): return "movies/\(year)/rating"
+        }
+    }
+}
 
 
+extension ApiRoute {
+    
+    func url(for environment: ApiEnvironment) -> String {
+        return "\(environment.url)/\(path)"
+    }
+}
+```
 
+Since `year` is a dynamic part of the API movie paths, we add a year argument to
+the movie routes as well, to ensure that one have to specify the year when using
+this enum cases.
 
+## Managing API contexts
 
+To simplify switching API environments without having to create new instances of
+the various services, I use to create an `ApiContext` protocol that contains all
+the information needed to talk with the API, such as `environment`, `tokens` etc.
+If you then use a single instance (singleton) of the context in an app, changing
+any information in this singleton would affect all services that use the context
+automatically. 
 
+Fow now, let's create an `ApiContext` protocol as well as a simple non-persisted
+implementation. We could then create a persisted implementation to the app later
+and easily switch it out to make the app remember any changes we made.
 
+However, for now, add these two files to a `Context` folder in the `Api` folder:
 
-
-
-
-
-repo contains an adjusted version of the Alamofire, AlamofireObjectMapper and Realm presentation I did at CocoaHeads Stockholm 2017-04-03
+   

@@ -17,6 +17,12 @@
 		4584F41D1F49DD6B0025CFDD /* Actor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4584F41C1F49DD6B0025CFDD /* Actor.swift */; };
 		4584F4211F49EE900025CFDD /* AuthService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4584F4201F49EE900025CFDD /* AuthService.swift */; };
 		4584F4231F49EF5B0025CFDD /* MovieService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4584F4221F49EF5B0025CFDD /* MovieService.swift */; };
+		4584F4281F4A42DD0025CFDD /* ApiMovie.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4584F4271F4A42DD0025CFDD /* ApiMovie.swift */; };
+		4584F42A1F4A442E0025CFDD /* ApiActor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4584F4291F4A442E0025CFDD /* ApiActor.swift */; };
+		4584F42C1F4A47400025CFDD /* ApiEnvironment.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4584F42B1F4A47400025CFDD /* ApiEnvironment.swift */; };
+		4584F42E1F4A47AC0025CFDD /* ApiRoute.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4584F42D1F4A47AC0025CFDD /* ApiRoute.swift */; };
+		4584F4311F4A4E280025CFDD /* ApiContext.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4584F4301F4A4E280025CFDD /* ApiContext.swift */; };
+		4584F4331F4A4E400025CFDD /* NonPersistentApiContext.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4584F4321F4A4E400025CFDD /* NonPersistentApiContext.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -31,6 +37,12 @@
 		4584F41C1F49DD6B0025CFDD /* Actor.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Actor.swift; sourceTree = "<group>"; };
 		4584F4201F49EE900025CFDD /* AuthService.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AuthService.swift; sourceTree = "<group>"; };
 		4584F4221F49EF5B0025CFDD /* MovieService.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MovieService.swift; sourceTree = "<group>"; };
+		4584F4271F4A42DD0025CFDD /* ApiMovie.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ApiMovie.swift; sourceTree = "<group>"; };
+		4584F4291F4A442E0025CFDD /* ApiActor.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ApiActor.swift; sourceTree = "<group>"; };
+		4584F42B1F4A47400025CFDD /* ApiEnvironment.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ApiEnvironment.swift; sourceTree = "<group>"; };
+		4584F42D1F4A47AC0025CFDD /* ApiRoute.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ApiRoute.swift; sourceTree = "<group>"; };
+		4584F4301F4A4E280025CFDD /* ApiContext.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ApiContext.swift; sourceTree = "<group>"; };
+		4584F4321F4A4E400025CFDD /* NonPersistentApiContext.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NonPersistentApiContext.swift; sourceTree = "<group>"; };
 		51EF595D5BB65F11C3D871A7 /* Pods-DemoApplication.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-DemoApplication.debug.xcconfig"; path = "Pods/Target Support Files/Pods-DemoApplication/Pods-DemoApplication.debug.xcconfig"; sourceTree = "<group>"; };
 		D90F5A35832A0AF29E060149 /* Pods_DemoApplication.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_DemoApplication.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		E0F2D478E61277B095511B24 /* Pods-DemoApplication.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-DemoApplication.release.xcconfig"; path = "Pods/Target Support Files/Pods-DemoApplication/Pods-DemoApplication.release.xcconfig"; sourceTree = "<group>"; };
@@ -69,6 +81,7 @@
 		4584F4041F49DB550025CFDD /* DemoApplication */ = {
 			isa = PBXGroup;
 			children = (
+				4584F4241F4A42D20025CFDD /* Api */,
 				4584F4171F49DD460025CFDD /* Domain */,
 				4584F4051F49DB550025CFDD /* AppDelegate.swift */,
 				4584F4071F49DB550025CFDD /* ViewController.swift */,
@@ -105,6 +118,43 @@
 				4584F4221F49EF5B0025CFDD /* MovieService.swift */,
 			);
 			path = Services;
+			sourceTree = "<group>";
+		};
+		4584F4241F4A42D20025CFDD /* Api */ = {
+			isa = PBXGroup;
+			children = (
+				4584F42F1F4A4E1A0025CFDD /* Context */,
+				4584F4251F4A42D20025CFDD /* Model */,
+				4584F4261F4A42D20025CFDD /* Services */,
+				4584F42B1F4A47400025CFDD /* ApiEnvironment.swift */,
+				4584F42D1F4A47AC0025CFDD /* ApiRoute.swift */,
+			);
+			path = Api;
+			sourceTree = "<group>";
+		};
+		4584F4251F4A42D20025CFDD /* Model */ = {
+			isa = PBXGroup;
+			children = (
+				4584F4271F4A42DD0025CFDD /* ApiMovie.swift */,
+				4584F4291F4A442E0025CFDD /* ApiActor.swift */,
+			);
+			path = Model;
+			sourceTree = "<group>";
+		};
+		4584F4261F4A42D20025CFDD /* Services */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = Services;
+			sourceTree = "<group>";
+		};
+		4584F42F1F4A4E1A0025CFDD /* Context */ = {
+			isa = PBXGroup;
+			children = (
+				4584F4301F4A4E280025CFDD /* ApiContext.swift */,
+				4584F4321F4A4E400025CFDD /* NonPersistentApiContext.swift */,
+			);
+			path = Context;
 			sourceTree = "<group>";
 		};
 		5FE0026A56DDBC1E16FECDEF /* Pods */ = {
@@ -252,8 +302,14 @@
 				4584F4081F49DB550025CFDD /* ViewController.swift in Sources */,
 				4584F4061F49DB550025CFDD /* AppDelegate.swift in Sources */,
 				4584F4211F49EE900025CFDD /* AuthService.swift in Sources */,
+				4584F4311F4A4E280025CFDD /* ApiContext.swift in Sources */,
+				4584F42E1F4A47AC0025CFDD /* ApiRoute.swift in Sources */,
+				4584F42A1F4A442E0025CFDD /* ApiActor.swift in Sources */,
+				4584F42C1F4A47400025CFDD /* ApiEnvironment.swift in Sources */,
 				4584F41B1F49DD640025CFDD /* Movie.swift in Sources */,
 				4584F41D1F49DD6B0025CFDD /* Actor.swift in Sources */,
+				4584F4281F4A42DD0025CFDD /* ApiMovie.swift in Sources */,
+				4584F4331F4A4E400025CFDD /* NonPersistentApiContext.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -421,6 +477,7 @@
 				4584F4161F49DB550025CFDD /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};

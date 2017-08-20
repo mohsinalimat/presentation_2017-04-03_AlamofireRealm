@@ -12,6 +12,7 @@ protocol Movie {
     
     var name: String { get }
     var releaseDate: Date { get }
-    var averageRating: Double { get }
+    var grossing: Int { get }
+    var rating: Double { get }
     var cast: [Actor] { get }
 }

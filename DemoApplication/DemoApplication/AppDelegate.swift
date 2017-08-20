@@ -2,7 +2,7 @@
 //  AppDelegate.swift
 //  DemoApplication
 //
-//  Created by Saidi Daniel (BookBeat) on 2017-08-20.
+//  Created by Daniel Saidi on 2017-08-20.
 //  Copyright © 2017 Daniel Saidi. All rights reserved.
 //
 
