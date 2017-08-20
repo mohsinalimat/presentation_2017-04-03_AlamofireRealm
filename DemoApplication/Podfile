@@ -1,0 +1,6 @@
+use_frameworks!
+
+target 'DemoApplication' do
+    pod 'Alamofire', '~> 4.0.0'
+    pod 'AlamofireObjectMapper', '~> 4.0' 
+end
