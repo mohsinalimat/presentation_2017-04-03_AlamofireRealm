@@ -1,0 +1,7 @@
+---
+title: Movies - Top Grossing
+permalink: /api/movies/grossing
+---
+
+{% assign movies = (site.data.movies limit:10 | sort: 'grossing' | reverse %}
+{{ movies | jsonify }}

@@ -1,0 +1,7 @@
+---
+title: Movies - Top Rated
+permalink: /api/movies/rating
+---
+
+{% assign movies = (site.data.movies limit:10 | sort: 'rating' | reverse %}
+{{ movies | jsonify }}

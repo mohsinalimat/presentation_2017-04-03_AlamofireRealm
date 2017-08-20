@@ -1,0 +1,21 @@
+title: CocoaHeads Sthlm Alamofire Test API
+email: daniel.saidi@gmail.com
+description: > # this means to ignore newlines until "baseurl:"
+  This is a fake api that returns data for a demo app.
+baseurl: "" # the subpath of your site, e.g. /blog
+url: "https://github.com/danielsaidi/CocoaHeads-2017-04-03-Alamofire-Realm"
+twitter_username: danielsaidi
+github_username:  dainelsaidi
+
+# Build settings
+markdown: kramdown
+theme: minima
+gems:
+  - jekyll-feed
+exclude:
+  - Gemfile
+  - Gemfile.lock
+
+collections:
+  api:
+    output: true
