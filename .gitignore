@@ -28,6 +28,9 @@ xcuserdata/
 *.dSYM.zip
 *.dSYM
 
+.sass-cache
+_site
+
 ## Playgrounds
 timeline.xctimeline
 playground.xcworkspace
