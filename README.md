@@ -173,8 +173,10 @@ and run `DemoApplication.xcworkspace` without compile errors, you are good to go
 
 # Step 5 - Create an API-specific comain implementation
 
-We are now ready to use Alamofire to pull some data from the API. You can have a
-look at the data that is returned from the API by checking out these two links:
+We are now ready to use Alamofire to pull some data from the API. Have a look at
+the data that will be returned from the API, using these two links:
+
+
 
 
 
