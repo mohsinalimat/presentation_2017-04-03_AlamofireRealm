@@ -175,19 +175,14 @@ and run `DemoApplication.xcworkspace` without compile errors, you are good to go
 # Step 5 - Create an API-specific domain model implementation
 
 We are now ready to use Alamofire to pull some data from the API. Have a look at
-the data collections that can be fetched from the API:
+the (very limited) data that can be fetched from it:
 
-* [Top 5 Rated Movies 2015](http://danielsaidi.com/CocoaHeads-2017-04-03-Alamofire-Realm/api/movies/2015/rating)
-* [Top 5 Rated Movies 2016](http://danielsaidi.com/CocoaHeads-2017-04-03-Alamofire-Realm/api/movies/2016/rating)
-* [Top 5 Grossing Movies 2016](http://danielsaidi.com/CocoaHeads-2017-04-03-Alamofire-Realm/api/movies/2015/grossing)
-* [Top 5 Grossing Movies 2016](http://danielsaidi.com/CocoaHeads-2017-04-03-Alamofire-Realm/api/movies/2016/grossing)
+* [Top 10 Rated Movies 2016](http://danielsaidi.com/CocoaHeads-2017-04-03-Alamofire-Realm/api/movies/2016/rating)
+* [Top 10 Grossing Movies 2016](http://danielsaidi.com/CocoaHeads-2017-04-03-Alamofire-Realm/api/movies/2016/grossing)
 
-As you can see, the "api" provides a very limit set of information, but it works
-great to demonstrate how to fetch and parse it with Alamofire.
-
-Let's create an API-specific implementation of the domain model! Create an `API`
-folder in the project root. Just as with `Domain`, create a `Model` folder with
-two files: `ApiMovie.swift` and `ApiActor.swift`.
+Now, let's create an API-specific implementation of the domain model. Create an
+`API` folder in the project root, then add a `Model` sub folder to it, with two
+files: `ApiMovie.swift` and `ApiActor.swift`.
 
 ```
 // ApiMovie.swift
@@ -329,7 +324,7 @@ Since `year` is a dynamic part of the API movie paths, we add a year argument to
 the movie routes as well, to ensure that one have to specify the year when using
 this enum cases.
 
-## Managing API contexts
+## Managing the API context
 
 To simplify switching API environments without having to create new instances of
 the various services, I use to create an `ApiContext` protocol that contains all
@@ -344,4 +339,10 @@ and easily switch it out to make the app remember any changes we made.
 
 However, for now, add these two files to a `Context` folder in the `Api` folder:
 
-   
+```
+// ApiContext.swift
+```   
+
+```
+// NonPersistedApiContext.swift
+```   
