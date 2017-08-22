@@ -3,7 +3,7 @@
   releaseDate: 2016-06-17
   grossing: 486295561
   rating: 74
-  actors:
+  cast:
    - name: Ellen DeGeneres
    - name: Albert Brooks
    - name: Ed O'Neill
@@ -13,7 +13,7 @@
   releaseDate: 2016-12-16
   grossing: 424987707 
   rating: 79
-  actors:
+  cast:
    - name: Felicity Jones
    - name: Diego Luna
    - name: Alan Tudyk
@@ -23,7 +23,7 @@
   releaseDate: 2016-05-06
   grossing: 408084349
   rating: 79
-  actors:
+  cast:
    - name: Chris Evans
    - name: Robert Downey Jr.
    - name: Scarlett Johansson
@@ -33,7 +33,7 @@
   releaseDate: 2016-07-08
   grossing: 368384330
   rating: 66
-  actors:
+  cast:
    - name: Louis C.K.
    - name: Eric Stonestreet
    - name: Kevin Hart
@@ -43,7 +43,7 @@
   releaseDate: 2016-04-15
   grossing: 364001123
   rating: 75
-  actors:
+  cast:
    - name: Neel Sethi
    - name: Bill Murray
    - name: Ben Kinglsey
@@ -53,7 +53,7 @@
   releaseDate: 2016-02-12
   grossing: 363070709
   rating: 80
-  actors:
+  cast:
    - name: Ryan Reynolds
    - name: Karan Soni
    - name: T.J. Miller
@@ -63,7 +63,7 @@
   releaseDate: 2016-03-04
   grossing: 341268248
   rating: 81
-  actors:
+  cast:
    - name: Ginnifer Goodwin
    - name: Jason Bateman
    - name: Idris Elba
@@ -73,7 +73,7 @@
   releaseDate: 2016-03-25
   grossing: 330360194
   rating: 66
-  actors:
+  cast:
    - name: Ben Affleck
    - name: Henry Cavill
    - name: Amy Adams
@@ -83,7 +83,7 @@
   releaseDate: 2016-08-05
   grossing: 325100054
   rating: 62
-  actors:
+  cast:
    - name: Will Smith
    - name: Margot Robbie
    - name: Jared Leto
@@ -93,7 +93,7 @@
   releaseDate: 2016-11-05
   grossing: 230107790
   rating: 76
-  actors:
+  cast:
    - name: Benedict Cumberbatch
    - name: Rachel McAdams
    - name: Mads Mikkelsen
