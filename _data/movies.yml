@@ -1,15 +1,86 @@
-- name: Titanic
-  releaseDate: 2017-10-10
-  grossing: 21000000
-  rating: 98
+- name: Finding Dory
+  id: 1
+  releaseDate: 2016-06-17
+  grossing: 486295561
+  rating: 74
   actors:
-   - name: Kate Winslet
-   - name: Leo
+   - name: Ellen DeGeneres
+   - name: Albert Brooks
+   - name: Ed O'Neill
 
-- name: Turtles
-  releaseDate: 2016-10-10
-  grossing: 20000000
-  rating: 99
+- name: Rouge One - A Star Wars Story
+  id: 2
+  releaseDate: 2016-12-16
+  grossing: 424987707 
+  rating: 0000000000
   actors:
-   - name: Leo
-   - name: Mike
+   - name: FOO BAR
+
+- name: Captain America - Civil War
+  id: 3
+  releaseDate: 2016-05-06
+  grossing: 408084349
+  rating: 0000000000
+  actors:
+   - name: FOO BAR
+   
+- name: The Secret Life of Pets
+  id: 4
+  releaseDate: 2016-07-08
+  grossing: 368384330
+  rating: 0000000000
+  actors:
+   - name: FOO BAR
+   
+- name: The Jungle Book
+  id: 5
+  releaseDate: 2016-04-15
+  grossing: 364001123
+  rating: 0000000000
+  actors:
+   - name: FOO BAR
+   
+- name: Deadpool
+  id: 6
+  releaseDate: 2016-02-12
+  grossing: 363070709
+  rating: 0000000000
+  actors:
+   - name: FOO BAR
+   
+- name: Zootopia
+  id: 7
+  releaseDate: 2016-03-04
+  grossing: 341268248
+  rating: 0000000000
+  actors:
+   - name: FOO BAR
+   
+- name: Batman v Superman - Dawn of Justice
+  id: 8
+  releaseDate: 2016-03-25
+  grossing: 330360194
+  rating: 0000000000
+  actors:
+   - name: FOO BAR
+   
+- name: Suicide Squad
+  id: 9
+  releaseDate: 2016-08-05
+  grossing: 325100054
+  rating: 0000000000
+  actors:
+   - name: FOO BAR
+   
+- name: Doctor Strange
+  id: 10
+  releaseDate: 2016-11-05
+  grossing: 230107790
+  rating: 0000000000
+  actors:
+   - name: FOO BAR
+
+
+
+
+
