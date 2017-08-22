@@ -1,0 +1,8 @@
+---
+title: Movies - Top Rated
+permalink: /api/movies/7
+id: 7
+---
+
+{% assign movie = (site.data.movies where:"id", page.author-id  | first %}
+{{ movie | jsonify }}
