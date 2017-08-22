@@ -10,6 +10,7 @@ import Foundation
 
 protocol Movie {
     
+    var id: Int { get }
     var name: String { get }
     var releaseDate: Date { get }
     var grossing: Int { get }

@@ -20,7 +20,7 @@ class ViewController: UIViewController {
                 return print(error.localizedDescription)
             }
             print("Found \(movies.count) movies:")
-            movies.forEach { print($0.name) }
+            movies.forEach { print("  \($0.name) (\($0.releaseDate)) \($0.cast.first!.name)") }
         }
     }
 }

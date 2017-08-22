@@ -8,11 +8,9 @@
 
 import ObjectMapper
 
-class ApiActor: NSObject, Actor, Mappable {
+class ApiActor: Actor, Mappable {
     
-    required public init?(map: Map) {
-        super.init()
-    }
+    required public init?(map: Map) {}
     
     var name = ""
     

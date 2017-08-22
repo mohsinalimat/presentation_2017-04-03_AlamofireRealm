@@ -8,24 +8,23 @@
 
 import ObjectMapper
 
-class ApiMovie: NSObject, Movie, Mappable {
+class ApiMovie: Movie, Mappable {
     
-    required public init?(map: Map) {
-        super.init()
-    }
+    required public init?(map: Map) {}
     
+    var id = 0
     var name = ""
     var releaseDate = Date(timeIntervalSince1970: 0)
     var grossing = 0
     var rating = 0.0
-    fileprivate var _cast = [ApiActor]()
+    var _cast = [ApiActor]()
     var cast = [Actor]()
     
     func mapping(map: Map) {
         name <- map["name"]
-        releaseDate <- (map["releaseDate"], DateTransform())
+        releaseDate <- (map["releaseDate"], DateTransform.custom)
         grossing <- map["grossing"]
-        rating <- map["grossing"]
+        rating <- map["rating"]
         _cast <- map["cast"]
         cast = _cast
     }

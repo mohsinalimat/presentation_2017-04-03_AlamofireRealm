@@ -91,6 +91,7 @@ import Foundation
 
 protocol Movie {
     
+    var id: Int { get }
     var name: String { get }
     var releaseDate: Date { get }
     var grossing: Int { get }
@@ -201,12 +202,11 @@ add these two files:
 
 import ObjectMapper
 
-class ApiMovie: NSObject, Movie, Mappable {
+class ApiMovie: Movie, Mappable {
     
-    required public init?(map: Map) {
-        super.init()
-    }
+    required public init?(map: Map) {}
     
+    var id = 0
     var name = ""
     var releaseDate = Date(timeIntervalSince1970: 0)
     var grossing = 0
@@ -218,7 +218,7 @@ class ApiMovie: NSObject, Movie, Mappable {
         name <- map["name"]
         releaseDate <- (map["releaseDate"], DateTransform())
         grossing <- map["grossing"]
-        rating <- map["grossing"]
+        rating <- map["rating"]
         _cast <- map["cast"]
         cast = _cast
     }
@@ -230,11 +230,9 @@ class ApiMovie: NSObject, Movie, Mappable {
 
 import ObjectMapper
 
-class ApiActor: NSObject, Actor, Mappable {
+class ApiActor: Actor, Mappable {
     
-    required public init?(map: Map) {
-        super.init()
-    }
+    required public init?(map: Map) {}
     
     var name = ""
     
@@ -454,15 +452,28 @@ use `responseObject` instead.
 We will now setup the demo application and use it to perform our very first data
 request from the API.
 
-First, remove all boilerplate code from `AppDelegate` and `ViewController`. Keep
-`viewDidLoad` and add the following code to it:
+First, remove all boilerplate code from `AppDelegate` and `ViewController`, then
+add the following code to `ViewController`:
 
 ```
-
+override func viewDidLoad() {
+    super.viewDidLoad()
+    let env = ApiEnvironment.production
+    let context = NonPersistentApiContext(environment: env)
+    let service = AlamofireMovieService(context: context)
+    service.getTopGrossingMovies(year: 2016) { (movies, error) in
+        if let error = error {
+            return print(error.localizedDescription)
+        }
+        print("Found \(movies.count) movies:")
+        movies.forEach { print("   \($0.name)") }
+    }
+}
 ```
 
-**IMPORTANT** Before you test your app, you have to allow it to perform requests.
-Add the following to `Info.plist`:
+**IMPORTANT** Before you can test this in your app, you have to allow the app to
+perform external API requests. To do this, just add this `Info.plist` (in a real
+world app, though, you should specify the exact domains that the app can access):
 
 ```
 <key>NSAppTransportSecurity</key>
@@ -472,11 +483,130 @@ Add the following to `Info.plist`:
 </dict>
 ```
 
-In real-life apps, you should specify exactly which domains you may requests and
-not allow arbitrary loads, but in this demo app we will live a little dangerous.
+Now, run the app. If everything is properly setup, it should print the following:
 
-Now run the app, which should print the following:
+```
+Found 10 movies:
+   Finding Dory
+   Rouge One - A Star Wars Story
+   Captain America - Civil War
+   The Secret Life of Pets
+   The Jungle Book
+   Deadpool
+   Zootopia
+   Batman v Superman - Dawn of Justice
+   Suicide Squad
+   Doctor Strange
+```
+
+If you see this in your log, then nice! This means that our app loads movie data
+from the remove API. Good job! 
+
+Now, change the print for each movie to look like this:
+
+```
+movies.forEach { print("   \($0.name) (\($0.releaseDate))") }
+```
+
+Ooooops! The app should not output the following:
+
+```
+Found 10 movies:
+   Finding Dory (1970-01-01 00:33:36 +0000)
+   Rouge One - A Star Wars Story (1970-01-01 00:33:36 +0000)
+   Captain America - Civil War (1970-01-01 00:33:36 +0000)
+   The Secret Life of Pets (1970-01-01 00:33:36 +0000)
+   The Jungle Book (1970-01-01 00:33:36 +0000)
+   Deadpool (1970-01-01 00:33:36 +0000)
+   Zootopia (1970-01-01 00:33:36 +0000)
+   Batman v Superman - Dawn of Justice (1970-01-01 00:33:36 +0000)
+   Suicide Squad (1970-01-01 00:33:36 +0000)
+   Doctor Strange (1970-01-01 00:33:36 +0000)
+```
+
+Seems like the date parser does not work as expected (I TOLD you we would return
+to this later!) - let's fix it.
+
+
+# Step 9 - Fix the date parsing
+
+The problem with the dates is that the API uses a different date format than the
+format that `ObjectMapper` expects. We can solve this by adding an extension for
+`ObjectMapper`'s `DateTransform` class. Add this file to `Api/Extensions`:
+
+```
+DateTransform_Custom.swift
+
+//
+//  DateTransform_Custom.swift
+//  BBDomain
+//
+//  Created by Saidi Daniel (BookBeat) on 2017-05-08.
+//  Copyright © 2017 BookBeat. All rights reserved.
+//
+
+import ObjectMapper
+
+public extension DateTransform {
+    
+    public static var custom: DateFormatterTransform {
+        let formatter = DateFormatter()
+        formatter.dateFormat = "yyyy-MM-dd"
+        formatter.timeZone = TimeZone(secondsFromGMT: 0)
+        return DateFormatterTransform(dateFormatter: formatter)
+    }
+}
+```
+
+Then change the `releaseDate` mapping in `ApiMovie` to look like this:
+
+```
+releaseDate <- (map["releaseDate"], DateTransform.custom)
+```
+
+Now run the app once more. The dates in the print should now look a lot better:
+
+```
+Found 10 movies:
+   Finding Dory (2016-06-17 00:00:00 +0000)
+   Rouge One - A Star Wars Story (2016-12-16 00:00:00 +0000)
+   Captain America - Civil War (2016-05-06 00:00:00 +0000)
+   The Secret Life of Pets (2016-07-08 00:00:00 +0000)
+   The Jungle Book (2016-04-15 00:00:00 +0000)
+   Deadpool (2016-02-12 00:00:00 +0000)
+   Zootopia (2016-03-04 00:00:00 +0000)
+   Batman v Superman - Dawn of Justice (2016-03-25 00:00:00 +0000)
+   Suicide Squad (2016-08-05 00:00:00 +0000)
+   Doctor Strange (2016-11-05 00:00:00 +0000)
+```
+
+If you inspect the other properties, you will see that they are correctly parsed.
+
+Time to celebrate! Grab something to drink, go for a walk, rest your eyes...then
+return here for the next step: persisting the API service response to a database.
+
+
+# Step 10 - Add Realm support
+
+I will go through this in one single run, instead of breaking it up in different
+sections. Create a `Realm` folder in the application root then add a `Model` and
+a `Services` folder to it.
+
+Before we can use Realm, we have to grab it from CocoaPods. Add the following to
+your podfile:
 
 ```
 
 ```
+
+
+
+
+
+
+
+
+
+
+
+

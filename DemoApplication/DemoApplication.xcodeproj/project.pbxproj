@@ -24,6 +24,7 @@
 		4584F4331F4A4E400025CFDD /* NonPersistentApiContext.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4584F4321F4A4E400025CFDD /* NonPersistentApiContext.swift */; };
 		45BE53A41F4C2013007E40D3 /* AlamofireService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45BE53A31F4C2013007E40D3 /* AlamofireService.swift */; };
 		45BE53A61F4C2115007E40D3 /* AlamofireMovieService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45BE53A51F4C2115007E40D3 /* AlamofireMovieService.swift */; };
+		45BE53A91F4C5206007E40D3 /* DateTransform_Custom.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45BE53A81F4C5206007E40D3 /* DateTransform_Custom.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -45,6 +46,7 @@
 		4584F4321F4A4E400025CFDD /* NonPersistentApiContext.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NonPersistentApiContext.swift; sourceTree = "<group>"; };
 		45BE53A31F4C2013007E40D3 /* AlamofireService.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AlamofireService.swift; sourceTree = "<group>"; };
 		45BE53A51F4C2115007E40D3 /* AlamofireMovieService.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AlamofireMovieService.swift; sourceTree = "<group>"; };
+		45BE53A81F4C5206007E40D3 /* DateTransform_Custom.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DateTransform_Custom.swift; sourceTree = "<group>"; };
 		51EF595D5BB65F11C3D871A7 /* Pods-DemoApplication.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-DemoApplication.debug.xcconfig"; path = "Pods/Target Support Files/Pods-DemoApplication/Pods-DemoApplication.debug.xcconfig"; sourceTree = "<group>"; };
 		D90F5A35832A0AF29E060149 /* Pods_DemoApplication.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_DemoApplication.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		E0F2D478E61277B095511B24 /* Pods-DemoApplication.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-DemoApplication.release.xcconfig"; path = "Pods/Target Support Files/Pods-DemoApplication/Pods-DemoApplication.release.xcconfig"; sourceTree = "<group>"; };
@@ -124,6 +126,7 @@
 		4584F4241F4A42D20025CFDD /* Api */ = {
 			isa = PBXGroup;
 			children = (
+				45BE53A71F4C51FD007E40D3 /* Extensions */,
 				4584F42F1F4A4E1A0025CFDD /* Context */,
 				4584F4251F4A42D20025CFDD /* Model */,
 				4584F4261F4A42D20025CFDD /* Services */,
@@ -158,6 +161,14 @@
 				4584F4321F4A4E400025CFDD /* NonPersistentApiContext.swift */,
 			);
 			path = Context;
+			sourceTree = "<group>";
+		};
+		45BE53A71F4C51FD007E40D3 /* Extensions */ = {
+			isa = PBXGroup;
+			children = (
+				45BE53A81F4C5206007E40D3 /* DateTransform_Custom.swift */,
+			);
+			path = Extensions;
 			sourceTree = "<group>";
 		};
 		5FE0026A56DDBC1E16FECDEF /* Pods */ = {
@@ -302,6 +313,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				4584F4231F49EF5B0025CFDD /* MovieService.swift in Sources */,
+				45BE53A91F4C5206007E40D3 /* DateTransform_Custom.swift in Sources */,
 				4584F4081F49DB550025CFDD /* ViewController.swift in Sources */,
 				4584F4061F49DB550025CFDD /* AppDelegate.swift in Sources */,
 				4584F4311F4A4E280025CFDD /* ApiContext.swift in Sources */,
