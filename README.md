@@ -1,4 +1,4 @@
-# Alamofire, AlamofireObjectMapper and Realm demo project
+# Alamofire & Realm Demo
 
 This is a step-by-step walkthrough of my talk at **CocoaHeads Sthlm, April 2017**,
 where I demonstrated how to use `Alamofire 4` and `AlamofireObjectMapper` to pull
@@ -21,7 +21,7 @@ this more code-oriented post.
 
 I really recommend you to create a blank iOS project and go through all the steps
 in this post yourself. However, you can download the complete source code for the
-app from [this GitHub repository](https://github.com/danielsaidi/CocoaHeads-2017-04-03-Alamofire-Realm).
+app from [this GitHub repository](https://github.com/danielsaidi/AlamofireRealmDemo).
 
 If you want to run the demo application in the repo, you have to run `pod install`
 from the `DemoApplication` folder, then use `DemoApplication.xcworkspace` instead
@@ -188,9 +188,9 @@ that is done, close the project, then open `DemoApplication.xcworkspace` instead
 We are now ready to use Alamofire to pull some data from our API. Have a look at
 the (very limited) data that can be fetched from it:
 
-* [Single movie (by id)](http://danielsaidi.com/CocoaHeads-2017-04-03-Alamofire-Realm/api/movies/1)
-* [Top 10 Grossing Movies 2016](http://danielsaidi.com/CocoaHeads-2017-04-03-Alamofire-Realm/api/movies/topGrossing/2016)
-* [Top 10 Rated Movies 2016](http://danielsaidi.com/CocoaHeads-2017-04-03-Alamofire-Realm/api/movies/topRated/2016)
+* [Single movie by id](http://danielsaidi.com/AlamofireRealmDemo/api/movies/1)
+* [Top 10 Grossing Movies 2016](http://danielsaidi.com/AlamofireRealmDemo/api/movies/topGrossing/2016)
+* [Top 10 Grossing Movies 2016 - By Rating](http://danielsaidi.com/AlamofireRealmDemo/api/movies/topRated/2016)
 
 Let's create an API-specific implementation of the domain model. Create an `API`
 folder in the project root, next to `Domain`, then add a `Model` sub folder and
@@ -277,7 +277,7 @@ import Foundation
 
 enum ApiEnvironment: String { case
     
-    production = "http://danielsaidi.com/CocoaHeads-2017-04-03-Alamofire-Realm/api/"
+    production = "http://danielsaidi.com/AlamofireRealmDemo/api/"
     
     var url: String {
         return rawValue

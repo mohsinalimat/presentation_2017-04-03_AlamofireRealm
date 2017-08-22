@@ -19,7 +19,7 @@ class ViewController: UIViewController {
             if let error = error {
                 return print(error.localizedDescription)
             }
-            print("Received \(movies.count) movies:")
+            print("Found \(movies.count) movies:")
             movies.forEach { print($0.name) }
         }
     }
