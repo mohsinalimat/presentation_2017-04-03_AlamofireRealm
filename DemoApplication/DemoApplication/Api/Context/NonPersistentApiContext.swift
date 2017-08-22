@@ -8,11 +8,10 @@
 
 import Foundation
 
-class NonPersistentApiContext: NSObject, ApiContext {
+class NonPersistentApiContext: ApiContext {
     
     init(environment: ApiEnvironment) {
         self.environment = environment
-        super.init()
     }
     
     var environment: ApiEnvironment

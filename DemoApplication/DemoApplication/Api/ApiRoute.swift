@@ -10,32 +10,17 @@ import Foundation
 
 enum ApiRoute { case
     
-    auth,
+    movie(id: Int),
     topGrossingMovies(year: Int),
     topRatedMovies(year: Int)
-}
-
-
-extension ApiRoute {
     
     var path: String {
         switch self {
-        case .auth: return "TBD"
-        case .topGrossingMovies(let year): return "movies/\(year)/grossing"
-        case .topRatedMovies(let year): return "movies/\(year)/rating"
+        case .movie(let id): return "movies/\(id)"
+        case .topGrossingMovies(let year): return "movies/topGrossing/\(year)"
+        case .topRatedMovies(let year): return "movies/topRated/\(year)"
         }
     }
-    
-    var shouldRetryAfterAuth: Bool {
-        switch self {
-        case .auth: return false
-        default: return true
-        }
-    }
-}
-
-
-extension ApiRoute {
     
     func url(for environment: ApiEnvironment) -> String {
         return "\(environment.url)/\(path)"

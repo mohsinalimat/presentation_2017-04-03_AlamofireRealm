@@ -12,14 +12,16 @@ class ViewController: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        // Do any additional setup after loading the view, typically from a nib.
+        let env = ApiEnvironment.production
+        let context = NonPersistentApiContext(environment: env)
+        let service = AlamofireMovieService(context: context)
+        service.getTopGrossingMovies(year: 2016) { (movies, error) in
+            if let error = error {
+                return print(error.localizedDescription)
+            }
+            print("Received \(movies.count) movies:")
+            movies.forEach { print($0.name) }
+        }
     }
-
-    override func didReceiveMemoryWarning() {
-        super.didReceiveMemoryWarning()
-        // Dispose of any resources that can be recreated.
-    }
-
-
 }
 

@@ -8,20 +8,15 @@
 
 import ObjectMapper
 
-class ApiActor: NSObject, Actor {
+class ApiActor: NSObject, Actor, Mappable {
     
     required public init?(map: Map) {
         super.init()
     }
     
     var name = ""
-}
-
-
-extension ApiActor: Mappable {
     
     func mapping(map: Map) {
-        
         name <- map["name"]
     }
 }

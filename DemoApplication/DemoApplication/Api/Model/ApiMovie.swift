@@ -8,7 +8,7 @@
 
 import ObjectMapper
 
-class ApiMovie: NSObject, Movie {
+class ApiMovie: NSObject, Movie, Mappable {
     
     required public init?(map: Map) {
         super.init()
@@ -20,13 +20,8 @@ class ApiMovie: NSObject, Movie {
     var rating = 0.0
     fileprivate var _cast = [ApiActor]()
     var cast = [Actor]()
-}
-
-
-extension ApiMovie: Mappable {
     
     func mapping(map: Map) {
-        
         name <- map["name"]
         releaseDate <- (map["releaseDate"], DateTransform())
         grossing <- map["grossing"]
