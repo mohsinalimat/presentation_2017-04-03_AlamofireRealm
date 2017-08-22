@@ -12,7 +12,9 @@ class ApiActor: Actor, Mappable {
     
     required public init?(map: Map) {}
     
+    
     var name = ""
+    
     
     func mapping(map: Map) {
         name <- map["name"]

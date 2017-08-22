@@ -14,13 +14,12 @@ class ViewController: UIViewController {
         super.viewDidLoad()
         let env = ApiEnvironment.production
         let context = NonPersistentApiContext(environment: env)
-        let service = AlamofireMovieService(context: context)
+        let baseService = AlamofireMovieService(context: context)
+        let service = RealmMovieService(baseService: baseService)
+        var invokeCount = 0
         service.getTopGrossingMovies(year: 2016) { (movies, error) in
-            if let error = error {
-                return print(error.localizedDescription)
-            }
-            print("Found \(movies.count) movies:")
-            movies.forEach { print("  \($0.name) (\($0.releaseDate)) \($0.cast.first!.name)") }
+            invokeCount += 1
+            print("Found \(movies.count) movies (callback #\(invokeCount))")
         }
     }
 }

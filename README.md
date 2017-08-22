@@ -93,6 +93,7 @@ protocol Movie {
     
     var id: Int { get }
     var name: String { get }
+    var year: Int { get }
     var releaseDate: Date { get }
     var grossing: Int { get }
     var rating: Double { get }
@@ -206,21 +207,26 @@ class ApiMovie: Movie, Mappable {
     
     required public init?(map: Map) {}
     
+
     var id = 0
     var name = ""
+    var year = 0
     var releaseDate = Date(timeIntervalSince1970: 0)
     var grossing = 0
     var rating = 0.0
-    fileprivate var _cast = [ApiActor]()
-    var cast = [Actor]()
+    var cast: [Actor] { return _cast }
+    
+    private var _cast = [ApiActor]()
+    
     
     func mapping(map: Map) {
+        id <- map["id"]
         name <- map["name"]
-        releaseDate <- (map["releaseDate"], DateTransform())
+        year <- map["year"]
+        releaseDate <- (map["releaseDate"], DateTransform.custom)
         grossing <- map["grossing"]
         rating <- map["rating"]
         _cast <- map["cast"]
-        cast = _cast
     }
 }
 ``` 
@@ -234,24 +240,25 @@ class ApiActor: Actor, Mappable {
     
     required public init?(map: Map) {}
     
+
     var name = ""
     
+
     func mapping(map: Map) {
         name <- map["name"]
     }
 }
 ``` 
 
-As you can see, these classes implement their respecive model protocol, then add
-ObjectMapper mapping ontop. While `ApiActor` is straightforward, some things can
-be said about `ApiMovie`:
+These classes implement their respecive model protocol, with additional property
+mapping. `ApiActor` is straightforward, while some can be said about `ApiMovie`:
 
 * The release date is parsed using a DateTransform() instance. We may have to do
-tweak this later on.
+tweak this later on (oh, yes we will).
 
 * The `Movie` protocol has an [Actor] array, but the mapping requires [ApiActor].
-We therefore use a fileprivate `_cast` property for mappin, then copy the mapped
-data to the public `cast` property.
+We therefore use a fileprivate `_cast` mapping property, which we use as backing
+value for the calculated `cast` property.
 
 If we have set things up properly, we should now be able to point Alamofire to a
 certain api url and recursively parse movie data without any effort.
@@ -596,17 +603,202 @@ Before we can use Realm, we have to grab it from CocoaPods. Add the following to
 your podfile:
 
 ```
-
+pod 'RealmSwift'
 ```
 
+**IMPORTANT** To make Realm work, you must also add this to the end of the file:
+
+```
+post_install do |installer|
+    installer.pods_project.targets.each do |target|
+        target.build_configurations.each do |config|
+            config.build_settings['SWIFT_VERSION'] = '3.0'
+        end
+    end
+end
+```
+
+Then run `pod install` from the DemoApplication folder to install it to your app.
+
+Now let's create Realm-specific implementations of the domain model. The classes
+will be either be created by Realm when loading them from the database, or as we
+persist data that we receive from the API.
+
+Due to this, we want to be able to create instances by mapping properties from a
+seconds object that implements the same protocol.
+
+Add these two files to the `Realm/Model` folder:
+
+```
+// RealmMovie.swift
+
+import RealmSwift
+
+class RealmMovie: Object, Movie {
+    
+    convenience required public init(copy obj: Movie) {
+        self.init()
+        id = obj.id
+        name = obj.name
+        year = obj.year
+        releaseDate = obj.releaseDate
+        grossing = obj.grossing
+        rating = obj.rating
+        _cast.append(contentsOf: obj.cast.map { RealmActor(copy: $0) })
+    }
+    
+
+    dynamic var id = 0
+    dynamic var name = ""
+    dynamic var year = 0
+    dynamic var releaseDate = Date(timeIntervalSince1970: 0)
+    dynamic var grossing = 0
+    dynamic var rating = 0.0
+    var cast: [Actor] { return Array(_cast) }
+    
+    var _cast = List<RealmActor>()
 
 
+    override class func primaryKey() -> String? {
+        return "id"
+    }
+}
+```
+
+```
+// RealmActor.swift
+
+import RealmSwift
+
+class RealmActor: Object, Actor {
+    
+    convenience required public init(copy obj: Actor) {
+        self.init()
+        name = obj.name
+    }
+    
+
+    dynamic var name = ""
+    
+
+    override class func primaryKey() -> String? {
+        return "name"
+    }
+}
+```
+
+Once again, `RealmActor` is pretty straightforward while `RealmMovie` needs some
+explaining. Just like `ApiMovie`, it has a private `_cast` mapping property that
+is used as backing value for the calculated `cast` property.
+
+Now let's add a Realm-specific `MovieService` implementation, that lets us store
+movie data from the API to a Realm database.
+
+Add the following file to the `Realm/Services` folder, then scroll down and read
+about how it's designed:
+
+```
+// RealmMovieService.swift
 
 
+class RealmMovieService: MovieService {
+    
+    init(baseService: MovieService) {
+        self.baseService = baseService
+    }
+    
+    
+    fileprivate let baseService: MovieService
+    
+    fileprivate var realm: Realm { return try! Realm() }
+    
+    
+    func getMovie(id: Int, completion: @escaping MovieResult) {
+        getMovieFromDb(id: id, completion: completion)
+        getMovieFromService(id: id, completion: completion)
+    }
+    
+    func getTopGrossingMovies(year: Int, completion: @escaping MoviesResult) {
+        getTopGrossingMoviesFromDb(year: year, completion: completion)
+        getTopGrossingMoviesFromService(year: year, completion: completion)
+    }
+    
+    func getTopRatedMovies(year: Int, completion: @escaping MoviesResult) {
+        getTopRatedMoviesFromDb(year: year, completion: completion)
+        getTopRatedMoviesFromService(year: year, completion: completion)
+    }
+    
+    
+    fileprivate func getMovieFromDb(id: Int, completion: @escaping MovieResult) {
+        let obj = realm.object(ofType: RealmMovie.self, forPrimaryKey: id)
+        completion(obj, nil)
+    }
+    
+    fileprivate func getMovieFromService(id: Int, completion: @escaping MovieResult) {
+        baseService.getMovie(id: id) { (movie, error) in
+            self.persist(movie)
+            completion(movie, error)
+        }
+    }
+    
+    fileprivate func getTopGrossingMoviesFromDb(year: Int, completion: @escaping MoviesResult) {
+        let objs = realm.objects(RealmMovie.self)
+        let filtered = objs.filter("year = '\(year)'")
+        let sorted = filtered.sorted { $0.grossing > $1.grossing }
+        completion(Array(sorted), nil)
+    }
+    
+    fileprivate func getTopGrossingMoviesFromService(year: Int, completion: @escaping MoviesResult) {
+        baseService.getTopGrossingMovies(year: year) {  (movies, error) in
+            self.persist(movies)
+            completion(movies, error)
+        }
+    }
+    
+    fileprivate func getTopRatedMoviesFromDb(year: Int, completion: @escaping MoviesResult) {
+        let objs = realm.objects(RealmMovie.self)
+        let filtered = objs.filter("year = '\(year)'")
+        let sorted = filtered.sorted { $0.rating > $1.rating }
+        completion(Array(sorted), nil)
+    }
+    
+    fileprivate func getTopRatedMoviesFromService(year: Int, completion: @escaping MoviesResult) {
+        baseService.getTopRatedMovies(year: year) {  (movies, error) in
+            self.persist(movies)
+            completion(movies, error)
+        }
+    }
+    
+    fileprivate func persist(_ movie: Movie?) {
+        guard let movie = movie else { return }
+        persist([movie])
+    }
+    
+    fileprivate func persist(_ movies: [Movie]) {
+        let objs = movies.map { RealmMovie(copy: $0) }
+        try! realm.write {
+            realm.add(objs, update: true)
+        }
+    }
+}
+```
 
+`RealmMovieService` is a so called `decorator`, which uses a base implementation
+of the protocol that itself implements (in this case `MovieService`), and builds
+its behavior on top of the base implementation's behavior.
 
+In this case, `baseService` will be an `AlamofireMovieService` instance, but the
+`RealmMovieService` does not care about the logic of the base service. It simply
+uses it to get some data then applies its own logic to the mix.
 
+In this case, `RealmMovieService` will try to return data from the database, but
+at the same time it will also try to fetch data from the base service. When this
+base service calls the completion block, it will save any data it receives, then
+calls the completion block.
 
-
-
+`Disclaimer:` This is an intentional (but bad) design. I will use it to show how
+the Realm call will trigger the completion handler once, and how the API service
+result will trigger the completion handler once more. In a real application, you
+would probably add additional logic to check whether or not to call the API when
+you have data in the database etc.
 
