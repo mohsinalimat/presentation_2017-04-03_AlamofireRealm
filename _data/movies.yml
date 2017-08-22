@@ -1,6 +1,6 @@
 - name: Finding Dory
   id: 1
-  releaseDate: 2016-06-17
+  year: 2016
   grossing: 486295561
   rating: 74
   cast:
@@ -10,7 +10,7 @@
 
 - name: Rouge One - A Star Wars Story
   id: 2
-  releaseDate: 2016-12-16
+  year: 2016
   grossing: 424987707 
   rating: 79
   cast:
@@ -20,7 +20,7 @@
 
 - name: Captain America - Civil War
   id: 3
-  releaseDate: 2016-05-06
+  year: 2016
   grossing: 408084349
   rating: 79
   cast:
@@ -30,7 +30,7 @@
    
 - name: The Secret Life of Pets
   id: 4
-  releaseDate: 2016-07-08
+  year: 2016
   grossing: 368384330
   rating: 66
   cast:
@@ -40,7 +40,7 @@
    
 - name: The Jungle Book
   id: 5
-  releaseDate: 2016-04-15
+  year: 2016
   grossing: 364001123
   rating: 75
   cast:
@@ -50,7 +50,7 @@
    
 - name: Deadpool
   id: 6
-  releaseDate: 2016-02-12
+  year: 2016
   grossing: 363070709
   rating: 80
   cast:
@@ -60,7 +60,7 @@
    
 - name: Zootopia
   id: 7
-  releaseDate: 2016-03-04
+  year: 2016
   grossing: 341268248
   rating: 81
   cast:
@@ -70,7 +70,7 @@
    
 - name: Batman v Superman - Dawn of Justice
   id: 8
-  releaseDate: 2016-03-25
+  year: 2016
   grossing: 330360194
   rating: 66
   cast:
@@ -80,7 +80,7 @@
    
 - name: Suicide Squad
   id: 9
-  releaseDate: 2016-08-05
+  year: 2016
   grossing: 325100054
   rating: 62
   cast:
@@ -90,7 +90,7 @@
    
 - name: Doctor Strange
   id: 10
-  releaseDate: 2016-11-05
+  year: 2016
   grossing: 230107790
   rating: 76
   cast:
