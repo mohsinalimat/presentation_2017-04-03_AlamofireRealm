@@ -32,6 +32,10 @@
 		45BE53B61F4CCCDE007E40D3 /* AlamofireAuthService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45BE53B51F4CCCDE007E40D3 /* AlamofireAuthService.swift */; };
 		45BE53B81F4CD3BF007E40D3 /* ApiRequestRetrier.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45BE53B71F4CD3BF007E40D3 /* ApiRequestRetrier.swift */; };
 		45BE53BA1F4CE5FF007E40D3 /* ApiRequestAdapter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45BE53B91F4CE5FF007E40D3 /* ApiRequestAdapter.swift */; };
+		45BE53BE1F4CEB6D007E40D3 /* IoC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45BE53BC1F4CEB6D007E40D3 /* IoC.swift */; };
+		45BE53BF1F4CEB6D007E40D3 /* IoCContainer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45BE53BD1F4CEB6D007E40D3 /* IoCContainer.swift */; };
+		45BE53C11F4CEB8B007E40D3 /* DipContainer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45BE53C01F4CEB8B007E40D3 /* DipContainer.swift */; };
+		45BE53C31F4CEBE0007E40D3 /* DependencyManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45BE53C21F4CEBE0007E40D3 /* DependencyManager.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -61,6 +65,10 @@
 		45BE53B51F4CCCDE007E40D3 /* AlamofireAuthService.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AlamofireAuthService.swift; sourceTree = "<group>"; };
 		45BE53B71F4CD3BF007E40D3 /* ApiRequestRetrier.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ApiRequestRetrier.swift; sourceTree = "<group>"; };
 		45BE53B91F4CE5FF007E40D3 /* ApiRequestAdapter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ApiRequestAdapter.swift; sourceTree = "<group>"; };
+		45BE53BC1F4CEB6D007E40D3 /* IoC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = IoC.swift; sourceTree = "<group>"; };
+		45BE53BD1F4CEB6D007E40D3 /* IoCContainer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = IoCContainer.swift; sourceTree = "<group>"; };
+		45BE53C01F4CEB8B007E40D3 /* DipContainer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DipContainer.swift; sourceTree = "<group>"; };
+		45BE53C21F4CEBE0007E40D3 /* DependencyManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DependencyManager.swift; sourceTree = "<group>"; };
 		51EF595D5BB65F11C3D871A7 /* Pods-DemoApplication.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-DemoApplication.debug.xcconfig"; path = "Pods/Target Support Files/Pods-DemoApplication/Pods-DemoApplication.debug.xcconfig"; sourceTree = "<group>"; };
 		D90F5A35832A0AF29E060149 /* Pods_DemoApplication.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_DemoApplication.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		E0F2D478E61277B095511B24 /* Pods-DemoApplication.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-DemoApplication.release.xcconfig"; path = "Pods/Target Support Files/Pods-DemoApplication/Pods-DemoApplication.release.xcconfig"; sourceTree = "<group>"; };
@@ -104,6 +112,7 @@
 				4584F40C1F49DB550025CFDD /* Assets.xcassets */,
 				4584F4171F49DD460025CFDD /* Domain */,
 				4584F4111F49DB550025CFDD /* Info.plist */,
+				45BE53BB1F4CEB6D007E40D3 /* IoC */,
 				4584F40E1F49DB550025CFDD /* LaunchScreen.storyboard */,
 				4584F4091F49DB550025CFDD /* Main.storyboard */,
 				45BE53AA1F4C5803007E40D3 /* Realm */,
@@ -214,6 +223,17 @@
 				45BE53B11F4C5C83007E40D3 /* RealmMovieService.swift */,
 			);
 			path = Services;
+			sourceTree = "<group>";
+		};
+		45BE53BB1F4CEB6D007E40D3 /* IoC */ = {
+			isa = PBXGroup;
+			children = (
+				45BE53C21F4CEBE0007E40D3 /* DependencyManager.swift */,
+				45BE53C01F4CEB8B007E40D3 /* DipContainer.swift */,
+				45BE53BC1F4CEB6D007E40D3 /* IoC.swift */,
+				45BE53BD1F4CEB6D007E40D3 /* IoCContainer.swift */,
+			);
+			path = IoC;
 			sourceTree = "<group>";
 		};
 		5FE0026A56DDBC1E16FECDEF /* Pods */ = {
@@ -359,13 +379,17 @@
 			files = (
 				4584F4231F49EF5B0025CFDD /* MovieService.swift in Sources */,
 				45BE53A91F4C5206007E40D3 /* DateTransform_Custom.swift in Sources */,
+				45BE53C31F4CEBE0007E40D3 /* DependencyManager.swift in Sources */,
+				45BE53BF1F4CEB6D007E40D3 /* IoCContainer.swift in Sources */,
 				45BE53B81F4CD3BF007E40D3 /* ApiRequestRetrier.swift in Sources */,
 				4584F4081F49DB550025CFDD /* ViewController.swift in Sources */,
+				45BE53C11F4CEB8B007E40D3 /* DipContainer.swift in Sources */,
 				45BE53B41F4CCBEB007E40D3 /* AuthService.swift in Sources */,
 				45BE53BA1F4CE5FF007E40D3 /* ApiRequestAdapter.swift in Sources */,
 				45BE53B21F4C5C83007E40D3 /* RealmMovieService.swift in Sources */,
 				4584F4061F49DB550025CFDD /* AppDelegate.swift in Sources */,
 				4584F4311F4A4E280025CFDD /* ApiContext.swift in Sources */,
+				45BE53BE1F4CEB6D007E40D3 /* IoC.swift in Sources */,
 				45BE53B01F4C581D007E40D3 /* RealmActor.swift in Sources */,
 				45BE53AE1F4C5816007E40D3 /* RealmMovie.swift in Sources */,
 				4584F42E1F4A47AC0025CFDD /* ApiRoute.swift in Sources */,
