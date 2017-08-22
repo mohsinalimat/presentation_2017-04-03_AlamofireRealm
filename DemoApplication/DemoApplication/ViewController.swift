@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import Alamofire
 
 class ViewController: UIViewController {
 
@@ -15,11 +16,15 @@ class ViewController: UIViewController {
         let env = ApiEnvironment.production
         let context = NonPersistentApiContext(environment: env)
         let baseService = AlamofireMovieService(context: context)
-        let service = RealmMovieService(baseService: baseService)
-        var invokeCount = 0
-        service.getTopGrossingMovies(year: 2016) { (movies, error) in
-            invokeCount += 1
-            print("Found \(movies.count) movies (callback #\(invokeCount))")
+        let movieService = RealmMovieService(baseService: baseService)
+        
+        let authService = AlamofireAuthService(context: context)
+        let sessionManager = SessionManager.default
+        sessionManager.adapter = ApiRequestAdapter(context: context)
+        sessionManager.retrier = ApiRequestRetrier(context: context, authService: authService)
+        
+        movieService.getMovie(id: 1) { (movie, error) in
+            print(movie)
         }
     }
 }

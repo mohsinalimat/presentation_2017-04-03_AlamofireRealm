@@ -74,7 +74,7 @@ Press `Next` to select where to create your project. You will then have a new iO
 project just waiting to be filled with amazing code.
 
 
-# Step 2 - Describe the domain model
+# Step 2 - Define the domain model
 
 In this demo, we will fetch movies from a fake API. A `Movie` has some basic info
 and a `cast` property that contains `Actor` objects. For simplicity, `Actor` only
@@ -117,11 +117,10 @@ implementations. This makes it super easy to switch out which implementations th
 app should use. Stay tuned.
 
 
-# Step 3 - Describe the domain logic
+# Step 3 - Define the domain logic
 
 Since we have a static API with no client or user authorization or authentication,
-we don't have to start with this. Instead, we can describe how we want the app to
-fetch movies.
+we don't have to start with this. Instead, we can describe how to fetch movies.
 
 Add a `Services` sub folder to `Domain` and add this file:
 
@@ -185,7 +184,7 @@ This makes CocoaPods download the pods and link them to your Xcode project. Once
 that is done, close the project, then open `DemoApplication.xcworkspace` instead.
 
 
-# Step 5 - Create an API-specific domain model
+# Step 5 - Create an API-specific model
 
 We are now ready to use Alamofire to pull some data from our API. Have a look at
 the (very limited) data that can be fetched from it:
@@ -264,7 +263,7 @@ If we have set things up properly, we should now be able to point Alamofire to a
 certain api url and recursively parse movie data without any effort.
 
 
-# Step 6 - Setting the API foundation
+# Step 6 - Set up the API foundation
 
 Before we create an API-specific `MovieService` implementation, let's setup some
 utils in the `API` folder.
@@ -408,7 +407,7 @@ Ok, that was a nice long preparation phase mainly aimed at setting up a good bas
 for the future. I think we're now ready to fetch some movies from the API.
 
 
-# Step 7 - Creating an API-specific movie service
+# Step 7 - Create an API-specific movie service
 
 Now, finally, let's create an API-specific service and pull some data out of that
 API, shall we? In the `Api/Services` folder, add this file:
@@ -535,7 +534,7 @@ Seems like the date parser does not work as expected (I TOLD you we would return
 to this later!) - let's fix it.
 
 
-# Step 9 - Fix the date parsing
+# Step 9 - Fix date parsing
 
 The problem with the dates is that the API uses a different date format than the
 format that `ObjectMapper` expects. We can solve this by adding an extension for
@@ -593,14 +592,13 @@ Time to celebrate! Grab something to drink, go for a walk, rest your eyes...then
 return here for the next step: persisting the API service response to a database.
 
 
-# Step 10 - Add Realm support
+# Step 10 - Add Realm to the project
 
-I will go through this in one single run, instead of breaking it up in different
-sections. Create a `Realm` folder in the application root then add a `Model` and
-a `Services` folder to it.
+We will now add Realm to the project. Create a `Realm` folder in the application
+root, then add a `Model` and a `Services` folder to it. Now, let's create...wait
+a minute! Before we can use Realm, we have to grab it from CocoaPods, remember?
 
-Before we can use Realm, we have to grab it from CocoaPods. Add the following to
-your podfile:
+Add the following to your podfile:
 
 ```
 pod 'RealmSwift'
@@ -618,14 +616,20 @@ post_install do |installer|
 end
 ```
 
-Then run `pod install` from the DemoApplication folder to install it to your app.
+Run `pod install` from the `DemoApplication` folder to add Realm to your project.
+Once Realm is added, we can begin creating our Realm classes.
 
-Now let's create Realm-specific implementations of the domain model. The classes
-will be either be created by Realm when loading them from the database, or as we
-persist data that we receive from the API.
 
-Due to this, we want to be able to create instances by mapping properties from a
-seconds object that implements the same protocol.
+# Step 11 - Create a Realm-specific model
+
+Now let's create a Realm-specific model. These classes will either be created as
+we fetch data from the API (since we will save these objects to the database) or
+as we load data from the database.
+
+Realm will take care of the latter case, but we have to find a way to easily map
+API-specific objects to database-specific ones. In fact, it will be enough for a
+Realm-specific domain model to be able to map any implementation of the protocol
+that it implements. Whether or not it comes from an API is irrelevant (se below).
 
 Add these two files to the `Realm/Model` folder:
 
@@ -687,19 +691,25 @@ class RealmActor: Object, Actor {
 }
 ```
 
-Once again, `RealmActor` is pretty straightforward while `RealmMovie` needs some
-explaining. Just like `ApiMovie`, it has a private `_cast` mapping property that
-is used as backing value for the calculated `cast` property.
+Both classes inherit `Realm`'s `Object` class and have a convenience initializer
+that copies prperties from any other instance of the same protocol. Like the API
+model, `RealmActor` is straightforward, while `RealmMovie` needs some explaining. 
 
-Now let's add a Realm-specific `MovieService` implementation, that lets us store
-movie data from the API to a Realm database.
+Just like `ApiMovie`, `RealmMovie` has a private `_cast` property, which is used
+as a backing value for the calculated `cast` property. You can also see that the
+`_cast` property is a `Realm` `List<RealmActor>`, while `cast` is just `[Actor]`.
+The database-specific `List<>` implementation is only relevant inside the class.
 
-Add the following file to the `Realm/Services` folder, then scroll down and read
-about how it's designed:
+
+# Step 12 - Create a Realm-specific movie service
+
+Now let's add a Realm-specific `MovieService` that lets us store movies from the
+API in a Realm database. Add the following file to `Realm/Services`:
 
 ```
 // RealmMovieService.swift
 
+import RealmSwift
 
 class RealmMovieService: MovieService {
     
@@ -742,9 +752,8 @@ class RealmMovieService: MovieService {
     }
     
     fileprivate func getTopGrossingMoviesFromDb(year: Int, completion: @escaping MoviesResult) {
-        let objs = realm.objects(RealmMovie.self)
-        let filtered = objs.filter("year = '\(year)'")
-        let sorted = filtered.sorted { $0.grossing > $1.grossing }
+        let objs = realm.objects(RealmMovie.self).filter("year == \(year)")
+        let sorted = objs.sorted { $0.grossing > $1.grossing }
         completion(Array(sorted), nil)
     }
     
@@ -756,9 +765,8 @@ class RealmMovieService: MovieService {
     }
     
     fileprivate func getTopRatedMoviesFromDb(year: Int, completion: @escaping MoviesResult) {
-        let objs = realm.objects(RealmMovie.self)
-        let filtered = objs.filter("year = '\(year)'")
-        let sorted = filtered.sorted { $0.rating > $1.rating }
+        let objs = realm.objects(RealmMovie.self).filter("year == \(year)")
+        let sorted = objs.sorted { $0.rating > $1.rating }
         completion(Array(sorted), nil)
     }
     
@@ -783,22 +791,380 @@ class RealmMovieService: MovieService {
 }
 ```
 
+As you see, `RealmMovieService` requires another `MovieService` instance when it
+is created. What is up with that?
+
 `RealmMovieService` is a so called `decorator`, which uses a base implementation
 of the protocol that itself implements (in this case `MovieService`), and builds
-its behavior on top of the base implementation's behavior.
+its own behavior on top of the base implementation's behavior.
 
 In this case, `baseService` will be an `AlamofireMovieService` instance, but the
 `RealmMovieService` does not care about the logic of the base service. It simply
-uses it to get some data then applies its own logic to the mix.
+uses it, then saves any data it gets into a Realm database.
 
-In this case, `RealmMovieService` will try to return data from the database, but
-at the same time it will also try to fetch data from the base service. When this
-base service calls the completion block, it will save any data it receives, then
-calls the completion block.
+In this case, `RealmMovieService` will try to get data from the database, but at
+the same time, it will also try to get data from the base service. When the base
+service calls the completion, `RealmMovieService` saves any data it receives. It
+then calls its own completion block to notify the original caller about the data.
 
-`Disclaimer:` This is an intentional (but bad) design. I will use it to show how
-the Realm call will trigger the completion handler once, and how the API service
-result will trigger the completion handler once more. In a real application, you
-would probably add additional logic to check whether or not to call the API when
-you have data in the database etc.
+`Disclaimer:` This is an intentionally simple design. `RealmMovieService` always
+loads data from the database **and** from the base service. In a real app, you'd
+probably do best in adding additional logic to check if calling the base service
+is really needed.
 
+
+# Step 13 - Put Realm into action
+
+Let's give whatever we have now a try. Modify `viewDidLoad` to look like this:
+
+```
+override func viewDidLoad() {
+    super.viewDidLoad()
+    let env = ApiEnvironment.production
+    let context = NonPersistentApiContext(environment: env)
+    let baseService = AlamofireMovieService(context: context)
+    let service = RealmMovieService(baseService: baseService)
+    var invokeCount = 0
+    service.getTopGrossingMovies(year: 2016) { (movies, error) in
+        invokeCount += 1
+        if let error = error {
+            print("ERROR: \(error.localizedDescription)")
+        } else {
+            print("Found \(movies.count) movies (callback #\(invokeCount))")
+        }
+    }
+}
+```
+
+In the code above, we rename the Alamofire service to `baseService`, then create
+a new Realm service, into which we inject the `baseService` instance. The app is
+still loading top grossing movies with the `service` instance, but this time the
+service will first check the database, then call the API.
+
+As a result, the output will be the following the first time we run the app with
+this new configuration:
+
+```
+Found 0 movies  (callback #1)
+Found 10 movies (callback #2)
+```
+
+This happens because the database has no data, while the API will load 10 movies.
+
+If you re-run the app, the output will look like this:
+
+```
+Found 10 movies (callback #1)
+Found 10 movies (callback #2)
+```
+
+This happens because now, the database has data. However, it still calls the API.
+
+Now, go ahead and **KILL THE INTERNET CONNECTION**, then call `getTopRatedMovies`
+instead of `getTopGrossingMovies` (Alamofire will cache the previous response so
+we need to call another url). When you re-run the app, it should now output this:
+
+```
+Found 10 movies (callback #1)
+ERROR: The Internet connection appears to be offline.
+```
+
+This happens because the database data can still be loaded, while the API cannot
+be called since the Internet connection is dead.
+
+So, we now have a working offline mode, where we load data from the database and
+only refresh it with new data if we manage to get an API response. All we had to
+do was to change the service implementation. No other changes are required.
+
+
+# Step 14 - Retry failing requests
+
+In the real world, a user most often has to authenticate her/himself in order to
+use major parts of an API. Authentication often return a set of tokens, commonly
+an `auth token` and a `refresh token` (but how this works is up to the API).
+
+If the `auth token` and `refresh token` pattern is used, the authentication flow
+can look something like this:
+
+* If an auth token is available, the app can try to call the API with that token.
+
+* If no auth token is available, the app should show a login screen.
+
+* If an auth token is available, but requests fail witha 401, the auth token may
+have expired. The app should use the refresh token to request new tokens without
+notifying the user.
+
+* If the refresh succeeds, the app will have new tokens and should automatically
+retry all previously failed requests. 
+
+* If the refresh fails, the app should logout the user and show a login screen.
+
+Alamofire 4 makes this kind of logic **super simple** to implement, since it has
+a `RequestRetrier` protocol that we can implement and inject into Alamofire. The
+implementation will then be notified about all failing requests, so that you can
+determine whether or not to retry the request, and how to do so.
+
+We will demonstrate this by faking a failing auth. First, add an `auth` route to
+`ApiRoute`, and have it return `auth` as path. Our static API will always return
+the same "auth token" when the route is called, to let ut fake an authentication.
+
+Second, add the following file to `Domain/Services`:
+
+```
+// AuthService.swift
+
+import Foundation
+
+typealias AuthResult = (_ token: String?, _ error: Error?) -> ()
+
+
+protocol AuthService: class {
+
+    func authorizeApplication(completion: @escaping AuthResult)
+}
+``` 
+
+This is a really simple protocol that defines how the app is to authorize itself.
+We will implement it soon, but first we have to add someplace where we can store
+any auth tokens we receive from the API.
+
+`Disclaimer:` As an app grows, I find it easier to separate the app into context
+related parts instead of class types. In other words, instead of the `Model` and
+`Services` grouping, the app should probably benefit from grouping the code into
+`Movies` and `Authentication` groups instead, where each group could contain all
+related functionality for that group, like views, extensions etc. However, let's
+stick with this setup.
+
+Ok, back to storing auth tokens. Remember what I told you about the `ApiContext`
+earlier? Well, it's a **PERFECT** place to store these tokens, so let's do just
+that. Add an `authToken` property to the `ApiContext` protocol:
+
+```
+var authToken: String? { get set }
+```
+
+Also, add the property to `NonPersistentApiContext` (if we had a persistent one,
+it would remember the auth token even if restarted the app):
+
+```
+var authToken: String?
+```
+
+Now, let's add an Alamofire-based `AuthService` implementation to `Api/Services`:
+
+
+```
+// AlamofireAuthService.swift
+
+import Alamofire
+import AlamofireObjectMapper
+
+class AlamofireAuthService: AlamofireService, AuthService {
+    
+    func authorizeApplication(completion: @escaping AuthResult) {
+        get(at: .auth).responseString {
+            (res: DataResponse<String>) in
+            if let token = res.result.value {
+                self.context.authToken = token
+            }
+            completion(res.result.value, res.result.error)
+        }
+    }
+}
+``` 
+
+The class calls the fake API's auth route, which returns a static token. If this
+request succeeds, the token is saved in the context. If not, the error is thrown.
+
+Now, let's retry some requests! Add this file to the `Api` folder:
+
+```
+import Alamofire
+
+class ApiRequestRetrier: RequestRetrier {
+    
+    init(context: ApiContext, authService: AuthService) {
+        self.context = context
+        self.authService = authService
+    }
+    
+    
+    fileprivate let authService: AuthService
+    fileprivate let context: ApiContext
+    fileprivate var isAuthorizing = false
+    fileprivate var retryQueue = [RequestRetryCompletion]()
+    
+    
+    func should(
+        _ manager: SessionManager,
+        retry request: Request,
+        with error: Error,
+        completion: @escaping RequestRetryCompletion) {
+        
+        guard
+            shouldRetryRequest(with: request.request?.url),
+            shouldRetryResponse(with: request.response?.statusCode)
+            else { return completion(false, 0) }
+        
+        authorize(with: completion)
+    }
+    
+    
+    fileprivate func authorize(with completion: @escaping RequestRetryCompletion) {
+        print("Authorizing application...")
+        retryQueue.append(completion)
+        guard !isAuthorizing else { return }
+        isAuthorizing = true
+        authService.authorizeApplication { (token, error) in
+            self.printAuthResult(token, error)
+            self.isAuthorizing = false
+            self.context.authToken = token
+            let success = token != nil
+            self.retryQueue.forEach { $0(success, 0) }
+            self.retryQueue.removeAll()
+        }
+    }
+
+    fileprivate func printAuthResult(_ token: String?, _ error: Error?) {
+        if let error = error {
+            return print("Authorizing failed: \(error.localizedDescription)")
+        } 
+        if let token = token {
+            return print("Authorizing succeded: \(token)")
+        } 
+        print("No token received - failing!")
+    }
+
+    fileprivate func shouldRetryRequest(with url: URL?) -> Bool {
+        guard let url = url?.absoluteString else { return false }
+        let authPath = ApiRoute.auth.path
+        return !url.contains(authPath)
+    }
+    
+    fileprivate func shouldRetryResponse(with statusCode: Int?) -> Bool {
+        return true // statusCode == 401
+    }
+}
+
+```
+
+Look through this code. Whenever a request fails, Alamofire will ask the retrier
+if the request should be retried. The retrier will ask Alamofire to retry if the
+request is not a failing auth (read about the commented out 401 later down).
+
+If the retrier determines that a certain request should not be retried, it fails
+with the original error. This will cancel the request and make it unrecoverable.
+
+However, if the retrier determines that the request should be retried, it smacks
+it onto a retry queue, then triggers `authService.authorizeApplication`. Once it
+completes, the retrier checks if the authorization succeeded. If so, the retrier
+tells Alamofire to retry all queued requests. If not, it makes all requests fail
+with their original error.
+
+Note that this is completely hidden from the user as well as the app itself. The
+retrier works under the hood, tightly connected to Alamofire's internal workings.
+It just notifies the app whenever authorization fails, by failing all requests.
+
+**IMPORTANT**  In the real world, a 401 status code is an indication that tokens
+should be refreshed. If this refresh fails, a 401 indicates that the user has to
+login once again, since she/he has been logged out. However, in our fake context,
+we never receive a 401. So we will have to force a retry, which means that we in
+this case will have to retry all failing requests and ignore the status code. 
+
+To trigger the retry mechanisms, do the following:
+
+* Kill the Internet connection and perform a clean install, so that the app does
+not have an Alamofire cache.
+
+* Call any movie service function in `viewDidLoad` and place a breakpoint at the `authService.authorizeApplication` call.
+
+* Run the app. The app should now fail the request and activate this breakpoint.
+
+* Bring the Internet connection back online and resume the app. This should make
+the authorization succeed and have Alamofire successfully retry the request.
+
+* `viewDidLoad` should now receive a successful callback with correct movie data.
+
+Inject the retrier into `Alamofire` by adding the following to our `viewDidLoad`:
+
+```
+let sessionManager = SessionManager.default
+sessionManager.retrier = ApiRequestRetrier(context: context, authService: authService)
+```
+
+Note that you also have to add `import Alamofire` topmost to the controller file.
+That's it! Alamofire will now use this retrier whenever a request fails.
+
+
+# Step 15 - Adapt all Alamofire requests
+
+Sometimes, you have to add custom headers to every request you make to an API. A
+common scenario is to add `Accept` information, add auth tokens etc.
+
+To tweak any Alamofire requests before they are sent, you just have to implement
+the `RequestAdapter` protocol and inject it, like you did with `RequestRetrier`.
+Add the following file to the `Api` folder:
+
+```
+// ApiRequestAdapter.swift
+
+import Alamofire
+
+class ApiRequestAdapter: RequestAdapter {
+    
+    public init(context: ApiContext) {
+        self.context = context
+    }
+    
+    
+    fileprivate let context: ApiContext
+    
+    
+    func adapt(_ request: URLRequest) throws -> URLRequest {
+        guard let token = context.authToken else { return request }
+        var request = request
+        request.setValue(token, forHTTPHeaderField: "AUTH_TOKEN")
+        return request
+    }
+}
+```
+
+As you can see, it's very simple. It just checks if a token is stored in the app
+contex, and add any existing token to the request headers.
+
+Inject the retrier into `Alamofire` by adding the following to our `viewDidLoad`:
+
+```
+sessionManager.adapter = ApiRequestAdapter(context: context)
+```
+
+
+# Dependency Injection
+
+Well, I won't do this here, since it just add even more complexity to an already
+super-long tutorial. In the demo application that can be found in the repository,
+however, I have however setup an `IoC` folder in which I use a DI library called
+[Dip](https://github.com/AliSoftware/Dip). Check it out to see how I set this up.
+
+
+
+# That's a wrap!
+
+Well done! You have now created an app with abstract protocols from scratch then
+added both Alamofire, object mapping and Realm to the mix. You have also touched
+on how to easily retry and adapt requests using Alamofire's `RequestRetrier` and
+`RequestAdapter` protocols.
+
+In the demo app, which you can find [here](https://github.com/danielsaidi/AlamofireRealmDemo),
+I have added a example code to list data in a table view and navigate to a movie
+detail page. Check it out if you want to see everything in action.
+
+I hope this was helpful. Please let me know what you think.
+
+All the best
+
+Daniel Saidi
+
+* [@danielsaidi](http://twitter.com/danielsaidi)
+* [danielsaidi.com](http://danielsaidi.com)
+* [daniel.saidi@gmail.com](mailto:danielsaidi@gmail.com)

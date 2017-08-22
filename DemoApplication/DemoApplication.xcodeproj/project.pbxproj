@@ -28,6 +28,10 @@
 		45BE53AE1F4C5816007E40D3 /* RealmMovie.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45BE53AD1F4C5816007E40D3 /* RealmMovie.swift */; };
 		45BE53B01F4C581D007E40D3 /* RealmActor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45BE53AF1F4C581D007E40D3 /* RealmActor.swift */; };
 		45BE53B21F4C5C83007E40D3 /* RealmMovieService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45BE53B11F4C5C83007E40D3 /* RealmMovieService.swift */; };
+		45BE53B41F4CCBEB007E40D3 /* AuthService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45BE53B31F4CCBEB007E40D3 /* AuthService.swift */; };
+		45BE53B61F4CCCDE007E40D3 /* AlamofireAuthService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45BE53B51F4CCCDE007E40D3 /* AlamofireAuthService.swift */; };
+		45BE53B81F4CD3BF007E40D3 /* ApiRequestRetrier.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45BE53B71F4CD3BF007E40D3 /* ApiRequestRetrier.swift */; };
+		45BE53BA1F4CE5FF007E40D3 /* ApiRequestAdapter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45BE53B91F4CE5FF007E40D3 /* ApiRequestAdapter.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -53,6 +57,10 @@
 		45BE53AD1F4C5816007E40D3 /* RealmMovie.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RealmMovie.swift; sourceTree = "<group>"; };
 		45BE53AF1F4C581D007E40D3 /* RealmActor.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RealmActor.swift; sourceTree = "<group>"; };
 		45BE53B11F4C5C83007E40D3 /* RealmMovieService.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RealmMovieService.swift; sourceTree = "<group>"; };
+		45BE53B31F4CCBEB007E40D3 /* AuthService.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AuthService.swift; sourceTree = "<group>"; };
+		45BE53B51F4CCCDE007E40D3 /* AlamofireAuthService.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AlamofireAuthService.swift; sourceTree = "<group>"; };
+		45BE53B71F4CD3BF007E40D3 /* ApiRequestRetrier.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ApiRequestRetrier.swift; sourceTree = "<group>"; };
+		45BE53B91F4CE5FF007E40D3 /* ApiRequestAdapter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ApiRequestAdapter.swift; sourceTree = "<group>"; };
 		51EF595D5BB65F11C3D871A7 /* Pods-DemoApplication.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-DemoApplication.debug.xcconfig"; path = "Pods/Target Support Files/Pods-DemoApplication/Pods-DemoApplication.debug.xcconfig"; sourceTree = "<group>"; };
 		D90F5A35832A0AF29E060149 /* Pods_DemoApplication.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_DemoApplication.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		E0F2D478E61277B095511B24 /* Pods-DemoApplication.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-DemoApplication.release.xcconfig"; path = "Pods/Target Support Files/Pods-DemoApplication/Pods-DemoApplication.release.xcconfig"; sourceTree = "<group>"; };
@@ -126,6 +134,7 @@
 			isa = PBXGroup;
 			children = (
 				4584F4221F49EF5B0025CFDD /* MovieService.swift */,
+				45BE53B31F4CCBEB007E40D3 /* AuthService.swift */,
 			);
 			path = Services;
 			sourceTree = "<group>";
@@ -139,6 +148,8 @@
 				4584F4261F4A42D20025CFDD /* Services */,
 				4584F42B1F4A47400025CFDD /* ApiEnvironment.swift */,
 				4584F42D1F4A47AC0025CFDD /* ApiRoute.swift */,
+				45BE53B71F4CD3BF007E40D3 /* ApiRequestRetrier.swift */,
+				45BE53B91F4CE5FF007E40D3 /* ApiRequestAdapter.swift */,
 			);
 			path = Api;
 			sourceTree = "<group>";
@@ -155,8 +166,9 @@
 		4584F4261F4A42D20025CFDD /* Services */ = {
 			isa = PBXGroup;
 			children = (
-				45BE53A31F4C2013007E40D3 /* AlamofireService.swift */,
+				45BE53B51F4CCCDE007E40D3 /* AlamofireAuthService.swift */,
 				45BE53A51F4C2115007E40D3 /* AlamofireMovieService.swift */,
+				45BE53A31F4C2013007E40D3 /* AlamofireService.swift */,
 			);
 			path = Services;
 			sourceTree = "<group>";
@@ -347,7 +359,10 @@
 			files = (
 				4584F4231F49EF5B0025CFDD /* MovieService.swift in Sources */,
 				45BE53A91F4C5206007E40D3 /* DateTransform_Custom.swift in Sources */,
+				45BE53B81F4CD3BF007E40D3 /* ApiRequestRetrier.swift in Sources */,
 				4584F4081F49DB550025CFDD /* ViewController.swift in Sources */,
+				45BE53B41F4CCBEB007E40D3 /* AuthService.swift in Sources */,
+				45BE53BA1F4CE5FF007E40D3 /* ApiRequestAdapter.swift in Sources */,
 				45BE53B21F4C5C83007E40D3 /* RealmMovieService.swift in Sources */,
 				4584F4061F49DB550025CFDD /* AppDelegate.swift in Sources */,
 				4584F4311F4A4E280025CFDD /* ApiContext.swift in Sources */,
@@ -355,6 +370,7 @@
 				45BE53AE1F4C5816007E40D3 /* RealmMovie.swift in Sources */,
 				4584F42E1F4A47AC0025CFDD /* ApiRoute.swift in Sources */,
 				45BE53A41F4C2013007E40D3 /* AlamofireService.swift in Sources */,
+				45BE53B61F4CCCDE007E40D3 /* AlamofireAuthService.swift in Sources */,
 				4584F42A1F4A442E0025CFDD /* ApiActor.swift in Sources */,
 				4584F42C1F4A47400025CFDD /* ApiEnvironment.swift in Sources */,
 				4584F41B1F49DD640025CFDD /* Movie.swift in Sources */,

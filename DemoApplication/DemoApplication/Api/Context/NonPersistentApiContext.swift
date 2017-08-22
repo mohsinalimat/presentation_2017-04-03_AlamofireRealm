@@ -14,5 +14,6 @@ class NonPersistentApiContext: ApiContext {
         self.environment = environment
     }
     
+    var authToken: String?
     var environment: ApiEnvironment
 }

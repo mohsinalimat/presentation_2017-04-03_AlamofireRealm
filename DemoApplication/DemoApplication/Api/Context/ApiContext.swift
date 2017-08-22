@@ -10,5 +10,6 @@ import Foundation
 
 protocol ApiContext: class {
     
+    var authToken: String? { get set }
     var environment: ApiEnvironment { get set }
 }

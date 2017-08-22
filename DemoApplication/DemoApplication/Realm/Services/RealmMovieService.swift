@@ -7,7 +7,6 @@
 //
 
 import RealmSwift
-import ObjectMapper
 
 class RealmMovieService: MovieService {
     
@@ -56,7 +55,7 @@ class RealmMovieService: MovieService {
     }
     
     fileprivate func getTopGrossingMoviesFromService(year: Int, completion: @escaping MoviesResult) {
-        baseService.getTopGrossingMovies(year: year) {  (movies, error) in
+        baseService.getTopGrossingMovies(year: year) { (movies, error) in
             self.persist(movies)
             completion(movies, error)
         }
@@ -69,7 +68,7 @@ class RealmMovieService: MovieService {
     }
     
     fileprivate func getTopRatedMoviesFromService(year: Int, completion: @escaping MoviesResult) {
-        baseService.getTopRatedMovies(year: year) {  (movies, error) in
+        baseService.getTopRatedMovies(year: year) { (movies, error) in
             self.persist(movies)
             completion(movies, error)
         }
