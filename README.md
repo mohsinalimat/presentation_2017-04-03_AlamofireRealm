@@ -1153,4 +1153,5 @@ All the best
 Daniel Saidi
 
 * [@danielsaidi](http://twitter.com/danielsaidi)
+* [danielsaidi.com](http://danielsaidi.com)
 * [daniel.saidi@gmail.com](mailto:danielsaidi@gmail.com)
