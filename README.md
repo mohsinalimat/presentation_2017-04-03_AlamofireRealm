@@ -80,7 +80,7 @@ show how amazingly easy recursive mapping is with Alamofire.
  
 To avoid an app that is coupled to a specific domain model implementation, let us
 define this model as protocols. Create a `Domain` folder in the project root, add
-a `Model` folder to it then add these two files to `Model`:
+a `Model` folder to it then add these two files:
 
 ```
 // Movie.swift
@@ -117,7 +117,7 @@ makes it super easy to switch out the implementations used by the app. Stay tune
 # Step 2 - Define the domain logic
 
 Now, let's describe how the app should fetch movies from our API. Add a `Services`
-sub folder to `Domain` then add this file:
+sub folder to `Domain` then add this file to it:
 
 ```
 // MovieService.swift
