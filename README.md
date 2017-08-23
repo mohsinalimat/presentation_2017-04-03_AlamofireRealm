@@ -1193,8 +1193,8 @@ Well done! You have created an app with abstract protocols, then added Alamofire
 object mapping and Realm to the mix. You have also added request retry and adapt
 logic using the `RequestRetrier` and `RequestAdapter` protocols. Wow!
 
-I hope this was helpful. Please let me know what you think, and do not hesistate
-to throw any thoughts or ideas you have at me.
+I hope this was helpful. Do not hesistate to throw any thoughts or ideas you may
+have at me.
 
 All the best
 
